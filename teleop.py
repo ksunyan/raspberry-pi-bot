@@ -1,6 +1,7 @@
 from advanced_robot import AdvRobot
 from picamera import PiCamera
 from time import sleep, time
+from os import mkdir
 import curses
 
 # Create instance AdvRobot
@@ -26,6 +27,10 @@ turn_accel_scalar = 0
 # Set default camera settings
 camera.resolution = (2592, 1944)
 camera.framerate = 15
+
+# Make a new directory (name based on current time) for photos
+new_photo_directory = str(int(time()))
+mkdir(new_photo_directory)
 
 # Display default settings in window
 stdscr.addstr("POWER: " + str(power_setting) + '\n')
@@ -97,7 +102,7 @@ while True:
 
 	elif(ch == ord('p')):
 		current_time = str(int(time()))
-		camera.capture(current_time + '.jpg')
+		camera.capture(new_photo_directory + '/' + current_time + '.jpg')
 		stdscr.addstr("PHOTO CAPTURED at " + current_time + '\n')
 
 	else:
