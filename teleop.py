@@ -20,9 +20,6 @@ stdscr.keypad(True)
 power_setting = 0.7
 power_increment = 0.05
 turn_pwr_scalar = 0.7
-accel_time = 1
-accel_time_increment = 0.05
-turn_accel_scalar = 0
 
 # Set default camera settings
 camera.resolution = (2592, 1944)
@@ -33,7 +30,6 @@ new_photo_directory = str(int(time()))
 
 # Display default settings in window
 stdscr.addstr("POWER: " + str(power_setting) + '\n')
-stdscr.addstr("RAMP TIME (s): " + str(accel_time) + '\n')
 
 # Loop to detect keypresses and control robot
 while True:
@@ -49,7 +45,6 @@ while True:
 			power_setting = 1
 		stdscr.erase()
 		stdscr.addstr("POWER: " + str(power_setting) + '\n')
-		stdscr.addstr("RAMP TIME (s): " + str(accel_time) + '\n')
 
 	elif(ch == curses.KEY_DOWN):
 		if(power_setting > (0+power_increment)):
@@ -58,46 +53,27 @@ while True:
 			power_setting = 0
 		stdscr.erase()
 		stdscr.addstr("POWER: " + str(power_setting) + '\n')
-		stdscr.addstr("RAMP TIME (s): " + str(accel_time) + '\n')
-
-	elif(ch == curses.KEY_LEFT):
-		if(accel_time > (0+accel_time_increment)):
-			accel_time -= accel_time_increment
-		else:
-			accel_time = 0
-		stdscr.erase()
-		stdscr.addstr("POWER: " + str(power_setting) + '\n')
-		stdscr.addstr("RAMP TIME (s): " + str(accel_time) + '\n')
-
-	elif(ch == curses.KEY_RIGHT):
-		if(accel_time < (1-accel_time_increment)):
-			accel_time += accel_time_increment
-		else:
-			accel_time = 1
-		stdscr.erase()
-		stdscr.addstr("POWER: " + str(power_setting) + '\n')
-		stdscr.addstr("RAMP TIME (s): " + str(accel_time) + '\n')
 
 	elif(ch == ord('w')):
-		rbt.forward(power_setting,accel_time)
+		rbt.forward(power_setting)
 
 	elif(ch == ord('s')):
-		rbt.backward(power_setting,accel_time)
+		rbt.backward(power_setting)
 
 	elif(ch == ord('a')):
-		rbt.leftTank((turn_pwr_scalar * power_setting),(turn_accel_scalar * accel_time))
+		rbt.leftTank((turn_pwr_scalar * power_setting))
 
 	elif(ch == ord('d')):
-		rbt.rightTank((turn_pwr_scalar * power_setting),(turn_accel_scalar * accel_time))
+		rbt.rightTank((turn_pwr_scalar * power_setting))
 
 	elif(ch == ord('k')):
-		rbt.leftPivot((turn_pwr_scalar * power_setting),(turn_accel_scalar * accel_time))
+		rbt.leftPivot((turn_pwr_scalar * power_setting))
 
 	elif(ch == ord('l')):
-		rbt.rightPivot((turn_pwr_scalar * power_setting),(turn_accel_scalar * accel_time))
+		rbt.rightPivot((turn_pwr_scalar * power_setting))
 
 	elif(ch == ord(' ')):
-		rbt.brake(accel_time)
+		rbt.halt()
 
 	elif(ch == ord('p')):
 		if(not path.isdir(new_photo_directory)):
